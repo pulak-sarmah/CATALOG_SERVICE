@@ -1,2 +1,5 @@
 server:
     port: 5502
+    host: localhost
+database:
+    url: mongodb://ps:dockerDb@localhost:27017/admin
