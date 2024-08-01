@@ -1,7 +1,7 @@
 {
     "name": "template-service",
     "version": "1.0.0",
-    "description": "A user management service",
+    "description": "A catalog management service",
     "main": "index.js",
     "scripts": {
         "dev": "cross-env NODE_ENV=development nodemon src/server.ts",
@@ -15,7 +15,7 @@
         "start": "ts-node src/index.ts",
         "test": "jest --runInBand"
     },
-    "author": "Rakesh K <codersgyan@gmail.com>",
+    "author": "Pulak S <pulaksarmah333@gmail.com>",
     "license": "ISC",
     "devDependencies": {
         "@types/config": "^3.3.4",
