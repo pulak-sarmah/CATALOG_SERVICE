@@ -16,7 +16,7 @@ export default [
         .exists()
         .withMessage("Price type is required")
         .custom((value: "base" | "aditional") => {
-            const validKeys = ["base", "additional"];
+            const validKeys = ["base", "aditional"];
             if (!validKeys.includes(value)) {
                 throw new Error(
                     `${value} is invalid price type, possible values are ${validKeys.join(
@@ -24,6 +24,7 @@ export default [
                     )}`,
                 );
             }
+            return true;
         }),
     body("attributes").exists().withMessage("Attributes are required"),
 ];
