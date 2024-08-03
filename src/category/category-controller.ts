@@ -11,6 +11,10 @@ export class CategoryController {
         private logger: Logger,
     ) {
         this.create = this.create.bind(this);
+        this.index = this.index.bind(this);
+        this.getOne = this.getOne.bind(this);
+        this.update = this.update.bind(this);
+        this.delete = this.delete.bind(this);
     }
 
     async create(req: Request, res: Response, next: NextFunction) {
@@ -28,6 +32,52 @@ export class CategoryController {
             attributes,
         });
         this.logger.info("Category created", { id: category._id });
+        res.status(201).json({ id: category._id });
+    }
+
+    async update(req: Request, res: Response, next: NextFunction) {
+        const { categoryId } = req.params;
+        const { name, priceConfiguration, attributes } = req.body as Category;
+
+        const category = await this.categoryService.update(categoryId, {
+            name,
+            priceConfiguration,
+            attributes,
+        });
+
+        if (!category) {
+            return next(createHttpError(404, "Category not found"));
+        }
+
+        this.logger.info(`Category updated`, { id: category._id });
+        res.json(category);
+    }
+
+    async index(req: Request, res: Response) {
+        const categories = await this.categoryService.getAll();
+        this.logger.info(`Getting categories list`);
+        res.json(categories);
+    }
+
+    async getOne(req: Request, res: Response, next: NextFunction) {
+        const { categoryId } = req.params;
+        const category = await this.categoryService.getOne(categoryId);
+        if (!category) {
+            return next(createHttpError(404, "Category not found"));
+        }
+        this.logger.info(`Getting category`, { id: category._id });
+        res.json(category);
+    }
+
+    async delete(req: Request, res: Response, next: NextFunction) {
+        const { categoryId } = req.params;
+        const category = await this.categoryService.delete(categoryId);
+
+        if (!category) {
+            return next(createHttpError(404, "Category not found"));
+        }
+
+        this.logger.info(`Category deleted`, { id: category._id });
         res.json({ id: category._id });
     }
 }
