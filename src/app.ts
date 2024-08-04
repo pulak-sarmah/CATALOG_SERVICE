@@ -12,8 +12,10 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 import categoryRouter from "./category/category-router";
+import productRouter from "./product/product-router";
 
 app.use("/categories", categoryRouter);
+app.use("/products", productRouter);
 
 app.use(globalErrorHandler);
 
