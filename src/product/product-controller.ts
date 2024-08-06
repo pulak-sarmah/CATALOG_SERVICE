@@ -8,6 +8,9 @@ import { Product } from "./product-types";
 import { FileStorage } from "../common/types/storage";
 import { v4 as uuid4 } from "uuid";
 import { UploadedFile } from "express-fileupload";
+import { AuthRequest } from "../common/types";
+import { Roles } from "../common/constants";
+
 export class ProductController {
     constructor(
         private productService: ProductService,
@@ -59,17 +62,37 @@ export class ProductController {
 
     update = async (req: Request, res: Response, next: NextFunction) => {
         const result = validationResult(req);
+
         if (!result.isEmpty()) {
             return next(createHttpError(400, result.array()[0].msg as string));
         }
 
         const { productId } = req.params;
 
+        const ExistingProduct = await this.productService.getProduct(productId);
+
+        if (!ExistingProduct) {
+            return next(createHttpError(404, "Product not found"));
+        }
+
+        if ((req as AuthRequest).auth.role !== Roles.ADMIN) {
+            const tenantIdFromAuth = (req as AuthRequest).auth.tenant;
+
+            if (ExistingProduct.tenantId !== String(tenantIdFromAuth)) {
+                return next(
+                    createHttpError(
+                        403,
+                        "You are not allowed to access this product",
+                    ),
+                );
+            }
+        }
+
         let imageName: string | undefined;
         let oldImage: string | undefined | null;
 
         if (req.files?.image) {
-            oldImage = await this.productService.getProductImage(productId);
+            oldImage = ExistingProduct.image;
             const image = req.files.image as UploadedFile;
             imageName = uuid4();
 
@@ -78,7 +101,7 @@ export class ProductController {
                 fileData: image.data.buffer,
             });
 
-            await this.storage.delete(oldImage!);
+            await this.storage.delete(oldImage);
         }
 
         const {
