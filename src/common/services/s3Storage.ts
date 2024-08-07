@@ -5,6 +5,7 @@ import {
     S3Client,
 } from "@aws-sdk/client-s3";
 import { FileData, FileStorage } from "../types/storage";
+import createHttpError from "http-errors";
 
 export class s3Storage implements FileStorage {
     private client: S3Client;
@@ -40,8 +41,15 @@ export class s3Storage implements FileStorage {
         // @typescript-eslint/no-unsafe-call
         return await this.client.send(new DeleteObjectCommand(objectParams));
     }
+    getObjectUri(filename: string): string {
+        const bucket = config.get("s3.bucket");
+        const region = config.get("s3.region");
 
-    getObjectUri(): string {
-        throw new Error("Method not implemented.");
+        if (typeof bucket === "string" && typeof region === "string") {
+            return `https://${bucket}.s3.${region}.amazonaws.com/${filename}`;
+        }
+        const error = createHttpError(500, "S3 bucket or region not found");
+
+        throw error;
     }
 }

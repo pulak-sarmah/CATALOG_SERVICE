@@ -4,7 +4,7 @@ import { Filter, PaginateQuery, Product } from "./product-types";
 
 export class ProductService {
     async createProduct(product: Product): Promise<Product> {
-        return (await productModel.create(product)) as Promise<Product>;
+        return (await productModel.create(product)) as Product;
     }
 
     async updateProduct(
