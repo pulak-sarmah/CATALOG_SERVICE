@@ -56,6 +56,7 @@ export class ProductController {
             isPublish,
             image: imageName,
         };
+
         const newProduct = await this.productService.createProduct(product);
 
         res.json({ id: newProduct._id });
@@ -156,6 +157,12 @@ export class ProductController {
         const products = await this.productService.getProducts(
             filters,
             q as string,
+            {
+                page: req.query.page ? parseInt(req.query.page as string) : 1,
+                limit: req.query.limit
+                    ? parseInt(req.query.limit as string)
+                    : 10,
+            },
         );
 
         res.json({ products });
