@@ -7,7 +7,7 @@ import { canAccess } from "../common/middlewares/canAccess";
 import { Roles } from "../common/constants";
 import createProductValidator from "./create-product-validator";
 import fileUpload from "express-fileupload";
-import { s3Storage } from "../common/services/s3Storage";
+import { S3Storage } from "../common/services/S3Storage";
 
 import createHttpError from "http-errors";
 import updateProductValidator from "./update-product-validator";
@@ -16,7 +16,7 @@ import { asyncWrapper } from "../common/utils/wrapper";
 const router = express.Router();
 
 const productService = new ProductService();
-const storage = new s3Storage();
+const storage = new S3Storage();
 const productController = new ProductController(
     productService,
     logger,

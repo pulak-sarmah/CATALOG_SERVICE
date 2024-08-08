@@ -7,7 +7,7 @@ import {
 import { FileData, FileStorage } from "../types/storage";
 import createHttpError from "http-errors";
 
-export class s3Storage implements FileStorage {
+export class S3Storage implements FileStorage {
     private client: S3Client;
 
     constructor() {
