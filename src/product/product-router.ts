@@ -59,4 +59,11 @@ router.put(
 router.get("/", asyncWrapper(productController.index));
 router.get("/:productId", asyncWrapper(productController.show));
 
+router.delete(
+    "/:productId",
+    authenticate,
+    canAccess([Roles.ADMIN, Roles.MANAGER]),
+    asyncWrapper(productController.delete),
+);
+
 export default router;
