@@ -181,4 +181,32 @@ export class ProductController {
             pageSize: products.limit,
         });
     };
+
+    show = async (req: Request, res: Response, next: NextFunction) => {
+        const { productId } = req.params;
+
+        const product = await this.productService.getProduct(productId);
+
+        if (!product) {
+            return next(createHttpError(404, "Product not found"));
+        }
+
+        // if ((req as AuthRequest).auth.role !== Roles.ADMIN) {
+        //     const tenantIdFromAuth = (req as AuthRequest).auth.tenant;
+
+        //     if (product.tenantId !== String(tenantIdFromAuth)) {
+        //         return next(
+        //             createHttpError(
+        //                 403,
+        //                 "You are not allowed to access this product",
+        //             ),
+        //         );
+        //     }
+        // }
+
+        res.json({
+            ...product,
+            image: this.storage.getObjectUri(product.image),
+        });
+    };
 }
