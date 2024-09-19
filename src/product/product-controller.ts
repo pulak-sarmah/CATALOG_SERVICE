@@ -133,7 +133,7 @@ export class ProductController {
     };
 
     index = async (req: Request, res: Response) => {
-        const { q, tenantId, categoryId, isPublish } = req.query;
+        const { q = "", tenantId, categoryId, isPublish } = req.query;
 
         const filters: Filter = {};
 

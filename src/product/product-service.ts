@@ -29,7 +29,7 @@ export class ProductService {
         q: string,
         paginateQuery: PaginateQuery,
     ) {
-        const searchQueryRegexp = new RegExp(q, "i");
+        const searchQueryRegexp = q ? new RegExp(q, "i") : /.*/;
 
         const matchQuery = {
             ...filters,
@@ -59,7 +59,10 @@ export class ProductService {
                 },
             },
             {
-                $unwind: "$category",
+                $unwind: {
+                    path: "$category",
+                    preserveNullAndEmptyArrays: true,
+                },
             },
         ]);
 
