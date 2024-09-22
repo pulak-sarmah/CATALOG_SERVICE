@@ -11,7 +11,7 @@ const attributeValueSchema = new mongoose.Schema({
     },
 });
 
-const PriceConfigurationSchema = new mongoose.Schema({
+const priceConfigurationSchema = new mongoose.Schema({
     priceType: {
         type: String,
         enum: ["base", "aditional"],
@@ -37,9 +37,9 @@ const productSchema = new mongoose.Schema(
             type: String,
             require: true,
         },
-        PriceConfiguration: {
+        priceConfiguration: {
             type: Map,
-            of: PriceConfigurationSchema,
+            of: priceConfigurationSchema,
         },
         attributes: [attributeValueSchema],
         tenantId: {
