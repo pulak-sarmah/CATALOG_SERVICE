@@ -64,6 +64,11 @@ export class ProductService {
                     preserveNullAndEmptyArrays: true,
                 },
             },
+            {
+                $sort: {
+                    createdAt: -1,
+                },
+            },
         ]);
 
         return productModel.aggregatePaginate(aggregate, {

@@ -40,7 +40,7 @@ router.post(
     asyncWrapper(productController.create),
 );
 
-router.put(
+router.patch(
     "/:productId",
     authenticate,
     canAccess([Roles.ADMIN, Roles.MANAGER]),
